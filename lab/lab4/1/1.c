@@ -6,31 +6,23 @@ void key_wait(){
     // key값 무한 대기 & button이 눌리면 break
     int button;
     fp_key = fopen("/dev/key", "r"); //usleep(500000);
-    while(1){ 
-        button = fgetc(fp_key);
-        
-        if(button)
-            break;
-    }
+    while(!fgetc(fp_key));
     fclose(fp_key);
 }
 
 int input_arg(){
     int arg=0;
+    fp_key = fopen("/dev/key", "r");
     //키 누르는 내내 arg 1씩 추가 & display
     while(1){
-        fp_key = fopen("/dev/key", "r");
-        if(!fgetc(fp_key)){ //key가 입력x면 break, 입력중이면 아래 실행
-            fclose(fp_key);
+        if(!fgetc(fp_key)) //key가 입력x면 break, 입력중이면 아래 실행
             break;
-        }
-        fclose(fp_key);
         arg = (arg+1) % 10;
         fputc(arg, fp_hex);
         fflush(fp_hex);
         usleep(500000);
     }
-    
+    fclose(fp_key);
     return arg;
 }
 
