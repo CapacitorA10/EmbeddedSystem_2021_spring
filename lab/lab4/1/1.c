@@ -12,14 +12,12 @@ void key_wait(){
 
 int input_arg(){
     int arg=0;
-    fp_key = fopen("/dev/key", "r");
+    fp_key = fopen("/dev/key", "r"); 
     //키 누르는 내내 arg 1씩 추가 & display
-    while(1){
-        if(!fgetc(fp_key)) //key가 입력x면 break, 입력중이면 아래 실행
-            break;
-        arg = (arg+1) % 10;
-        fputc(arg, fp_hex);
-        fflush(fp_hex);
+    while(fgetc(fp_key)){ //key가 입력x면 break, 입력중이면 아래 실행
+        arg = (arg+1) % 10;  
+        fputc(arg, fp_hex);  
+        fflush(fp_hex);  
         usleep(500000);
     }
     fclose(fp_key);
