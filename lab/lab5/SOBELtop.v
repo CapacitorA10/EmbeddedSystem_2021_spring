@@ -3,7 +3,6 @@ module TOP(
         input   wire    [ 2:0]   addr,
         output  reg     [31:0]   rdata,     //output image는 2*2가 출력되므로 32bit
         input   wire    [31:0]   wdata,     //input image = 4*4-> 1행에 4pixel = 32bit, addr로 0,1,2,3행 접근
-        input   wire    [ 3:0]   byteenable,
         input   wire             cs,
         input   wire             read,
         input   wire             write,
@@ -57,34 +56,22 @@ module TOP(
     // input register A
     always @ (posedge clk)
         if(cs & write & (addr == 3'b000)) begin
-            if(byteenable[3]) data0[31:24] <= wdata[31:24];
-            if(byteenable[2]) data0[23:16] <= wdata[23:16];
-            if(byteenable[1]) data0[15: 8] <= wdata[15: 8];
-            if(byteenable[0]) data0[ 7: 0] <= wdata[ 7: 0];
+            data0 <= wdata;
         end 
     // input register B
     always @ (posedge clk)
         if(cs & write & (addr == 3'b001)) begin
-            if(byteenable[3]) data1[31:24] <= wdata[31:24];
-            if(byteenable[2]) data1[23:16] <= wdata[23:16];
-            if(byteenable[1]) data1[15: 8] <= wdata[15: 8];
-            if(byteenable[0]) data1[ 7: 0] <= wdata[ 7: 0];
+            data1 <= wdata;
         end 
     // input register C
     always @ (posedge clk)
         if(cs & write & (addr == 3'b010)) begin
-            if(byteenable[3]) data2[31:24] <= wdata[31:24];
-            if(byteenable[2]) data2[23:16] <= wdata[23:16];
-            if(byteenable[1]) data2[15: 8] <= wdata[15: 8];
-            if(byteenable[0]) data2[ 7: 0] <= wdata[ 7: 0];
+            data2 <= wdata;
         end 
     // input register D
     always @ (posedge clk)
         if(cs & write & (addr == 3'b011)) begin
-            if(byteenable[3]) data3[31:24] <= wdata[31:24];
-            if(byteenable[2]) data3[23:16] <= wdata[23:16];
-            if(byteenable[1]) data3[15: 8] <= wdata[15: 8];
-            if(byteenable[0]) data3[ 7: 0] <= wdata[ 7: 0];
+            data3 <= wdata;
         end 
     // output register
     always @ (posedge clk)
@@ -95,7 +82,7 @@ module TOP(
                 3'b010: rdata <= data2; //input
                 3'b011: rdata <= data3; //input
                 3'b100: rdata <= {out_p0, out_p1, out_p2, out_p3}; //output
-                default: rdata <= 32'dx;
+                default: rdata <= 32'd0;
             endcase
 
 endmodule
