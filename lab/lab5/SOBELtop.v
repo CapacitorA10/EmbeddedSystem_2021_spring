@@ -1,8 +1,8 @@
 module TOP(
         //Avalon MM I/F
         input   wire    [ 2:0]   addr,
-        output  reg     [32:0]   rdata,     //output image는 2*2가 출력되므로 32bit
-        input   wire    [32:0]   wdata,     //input image = 4*4-> 1행에 4pixel = 32bit, addr로 0,1,2,3행 접근
+        output  reg     [31:0]   rdata,     //output image는 2*2가 출력되므로 32bit
+        input   wire    [31:0]   wdata,     //input image = 4*4-> 1행에 4pixel = 32bit, addr로 0,1,2,3행 접근
         input   wire    [ 3:0]   byteenable,
         input   wire             cs,
         input   wire             read,
@@ -97,26 +97,5 @@ module TOP(
                 3'b100: rdata <= {out_p0, out_p1, out_p2, out_p3}; //output
                 default: rdata <= 32'dx;
             endcase
-
-endmodule
-
-
-module SOBEL(
-    input wire [7:0] p0, p1, p2, p3, p5, p6, p7, p8, // 글 읽는 방향으로 p0 to p8, and p4 is not needed
-    output wire [7:0] out                            //out=p4가 될 것
-    );
-
-    wire signed [10:0] gx, gy;           //11 bits because max value of gx and gy is 255*4 and last bit for sign				
-    wire signed [10:0] abs_gx, abs_gy;	//it is used to find the absolute value of gx and gy 
-    wire [10:0] sum;			        //the max value is 255*8. here no sign bit needed. 
-
-    assign gx = ((p2-p0)+((p5-p3)<<1)+(p8-p6)); //sobel mask for gradient in horiz. direction 
-    assign gy = ((p0-p6)+((p1-p7)<<1)+(p2-p8)); //sobel mask for gradient in vertical direction 
-
-    assign abs_gx = (gx[10]? ~gx+1 : gx);	// to find the absolute value of gx. 
-    assign abs_gy = (gy[10]? ~gy+1 : gy);	// to find the absolute value of gy. 
-
-    assign sum = (abs_gx+abs_gy);				// finding the sum 
-    assign out = (|sum[10:8])?8'hff : sum[7:0];	// to limit the max value to 255  
 
 endmodule
