@@ -1,9 +1,9 @@
 module TOP(
         //Avalon MM I/F
         input   wire    [ 2:0]   addr,
-        output  reg     [127:0]  rdata,     //output image는 2*2가 출력되므로 32bit
-        input   wire    [127:0]  writedata, //input image = 4*4-> 1행에 4pixel = 32bit, 4줄=128
-        input   wire    [ 15:0]   byteenable,
+        output  reg     [32:0]   rdata,     //output image는 2*2가 출력되므로 32bit
+        input   wire    [32:0]   wdata,     //input image = 4*4-> 1행에 4pixel = 32bit, addr로 0,1,2,3행 접근
+        input   wire    [ 3:0]   byteenable,
         input   wire             cs,
         input   wire             read,
         input   wire             write,
@@ -21,7 +21,7 @@ module TOP(
     // input data save register
     reg [31:0] data0, data1, data2, data3;
     // output data wire?reg?
-    reg [7:0] out_p0, out_p1, out_p2, out_p3; //rdata[31:0] = {outp0...outp3}
+    wire [7:0] out_p0, out_p1, out_p2, out_p3; //rdata[31:0] = {outp0...outp3}
 
     // input data separate
     assign p00 = data0[31:24];
@@ -57,45 +57,45 @@ module TOP(
     // input register A
     always @ (posedge clk)
         if(cs & write & (addr == 3'b000)) begin
-            if(byteenable[15]) data0[31:24] <= writedata[127:120];
-            if(byteenable[14]) data0[23:16] <= writedata[119:112];
-            if(byteenable[13]) data0[15: 8] <= writedata[111:104];
-            if(byteenable[12]) data0[ 7: 0] <= writedata[103:96];
+            if(byteenable[3]) data0[31:24] <= wdata[31:24];
+            if(byteenable[2]) data0[23:16] <= wdata[23:16];
+            if(byteenable[1]) data0[15: 8] <= wdata[15: 8];
+            if(byteenable[0]) data0[ 7: 0] <= wdata[ 7: 0];
         end 
     // input register B
     always @ (posedge clk)
         if(cs & write & (addr == 3'b001)) begin
-            if(byteenable[11]) data1[31:24] <= writedata[95:88];
-            if(byteenable[10]) data1[23:16] <= writedata[87:80];   
-            if(byteenable[9])  data1[15: 8] <= writedata[79:72];
-            if(byteenable[8])  data1[ 7: 0] <= writedata[71:64];
-        end
+            if(byteenable[3]) data1[31:24] <= wdata[31:24];
+            if(byteenable[2]) data1[23:16] <= wdata[23:16];
+            if(byteenable[1]) data1[15: 8] <= wdata[15: 8];
+            if(byteenable[0]) data1[ 7: 0] <= wdata[ 7: 0];
+        end 
     // input register C
     always @ (posedge clk)
         if(cs & write & (addr == 3'b010)) begin
-            if(byteenable[7]) data2[31:24] <= writedata[63:56];
-            if(byteenable[6]) data2[23:16] <= writedata[55:48];
-            if(byteenable[5]) data2[15: 8] <= writedata[47:40];
-            if(byteenable[4]) data2[ 7: 0] <= writedata[39:32];
-        end
+            if(byteenable[3]) data2[31:24] <= wdata[31:24];
+            if(byteenable[2]) data2[23:16] <= wdata[23:16];
+            if(byteenable[1]) data2[15: 8] <= wdata[15: 8];
+            if(byteenable[0]) data2[ 7: 0] <= wdata[ 7: 0];
+        end 
     // input register D
     always @ (posedge clk)
         if(cs & write & (addr == 3'b011)) begin
-            if(byteenable[3]) data3[31:24] <= writedata[31:24];
-            if(byteenable[2]) data3[23:16] <= writedata[23:16];
-            if(byteenable[1]) data3[15: 8] <= writedata[15: 8];
-            if(byteenable[0]) data3[ 7: 0] <= writedata[ 7: 0];   
-        end
+            if(byteenable[3]) data3[31:24] <= wdata[31:24];
+            if(byteenable[2]) data3[23:16] <= wdata[23:16];
+            if(byteenable[1]) data3[15: 8] <= wdata[15: 8];
+            if(byteenable[0]) data3[ 7: 0] <= wdata[ 7: 0];
+        end 
     // output register
     always @ (posedge clk)
         if(cs & read)
             case(addr)
-                3'b000: rdata <= {{96'b0}, data0}; //input
-                3'b001: rdata <= {{96'b0}, data1}; //input
-                3'b010: rdata <= {{96'b0}, data2}; //input
-                3'b011: rdata <= {{96'b0}, data3}; //input
+                3'b000: rdata <= data0; //input
+                3'b001: rdata <= data1; //input
+                3'b010: rdata <= data2; //input
+                3'b011: rdata <= data3; //input
                 3'b100: rdata <= {out_p0, out_p1, out_p2, out_p3}; //output
-                default: rdata <= 128'dx;
+                default: rdata <= 32'dx;
             endcase
 
 endmodule
