@@ -34,15 +34,15 @@ module TOP(
     assign p12 = data1[15: 8];
     assign p13 = data1[ 7: 0];
 
-    assign p20 = data2[63:56];
-    assign p21 = data2[55:48];
-    assign p22 = data2[47:40];
-    assign p23 = data2[39:32];
+    assign p20 = data2[31:24];
+    assign p21 = data2[23:16];
+    assign p22 = data2[15: 8];
+    assign p23 = data2[ 7: 0];
 
     assign p30 = data3[31:24];
     assign p31 = data3[23:16];
-    assign p32 = data3[15:8];
-    assign p33 = data3[7:0];
+    assign p32 = data3[15: 8];
+    assign p33 = data3[ 7: 0];
 
     // using module for sobel mask
     SOBEL U0 (.p0(p00), .p1(p01), .p2(p02), .p3(p10), .p5(p12), .p6(p20), .p7(p21), .p8(p22),
