@@ -17,49 +17,29 @@ unsigned char out_img_c[256][256]={0};
 void func_sobel(unsigned char img[][256]){
 
     int gx, gy, sum;
-    int i,j,k;
-    int temp;
-    char kernel_x[3][3] = {{-1, 0, 1},
+    int i,j,k,m,n;
+    int tempx, tempy;
+    int check=0;
+    char kernel_x[3][3] = { {-1, 0, 1},
                             {-2, 0, 2},
                             {-1, 0, 1}};
 
-    char kernel_y[3][3] = {{1,   2,   1},
-                            {0,   0,   0},
-                            {-1, -2, -1}};
-
+    char kernel_y[3][3] = { { 1, 2, 1},
+                            { 0, 0, 0},
+                            {-1,-2,-1}};
     for(i = 1; i < 256; i++){
         for(j = 1; j < 256; j++){
             for(k = 0; k <100; k++){ //k는 단순 반복용(시간 차 확인)
-                temp = 0;
-                temp += img[i-1][j-1] * kernel_x[0][0];
-                temp += img[i-1][j] * kernel_x[0][1];
-                temp += img[i-1][j+1] * kernel_x[0][2];
-
-                temp += img[i][j-1] * kernel_x[1][0];
-                temp += img[i][j] * kernel_x[1][1];
-                temp += img[i][j+1] * kernel_x[1][2];
-
-                temp += img[i+1][j-1] * kernel_x[2][0];
-                temp += img[i+1][j] * kernel_x[2][1];
-                temp += img[i+1][j+1] * kernel_x[2][2];
-
-                gx = temp;
-
-                temp = 0;
-                temp += img[i-1][j-1] * kernel_y[0][0];
-                temp += img[i-1][j] * kernel_y[0][1];
-                temp += img[i-1][j+1] * kernel_y[0][2];
-
-                temp += img[i][j-1] * kernel_y[1][0];
-                temp += img[i][j] * kernel_y[1][1];
-                temp += img[i][j+1] * kernel_y[1][2];
-
-                temp += img[i+1][j-1] * kernel_y[2][0];
-                temp += img[i+1][j] * kernel_y[2][1];
-                temp += img[i+1][j+1] * kernel_y[2][2];
-                
-                gy = temp;
-
+                tempx = 0;
+                tempy = 0;
+                for(m = 0; m < 3; m++){
+                    for(n = 0; n < 3; n++){
+                        tempx += img[i-1+m][j-1+n] * kernel_x[m][n];
+                        tempy += img[i-1+m][j-1+n] * kernel_y[m][n];
+                    }
+                }
+                gx = tempx;                
+                gy = tempy;
                 gx = abs(gx);
                 gy = abs(gy);
                 sum = gx + gy;
