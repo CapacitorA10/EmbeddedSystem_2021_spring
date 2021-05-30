@@ -93,7 +93,6 @@ int main(void){
 
     FILE* fpi, *fpo_c, *fpo_v;
     clock_t c1, c2, v1, v2;
-    float time_c, time_v;
     unsigned char in_img[256][256];
     
     // memory mapped io load
