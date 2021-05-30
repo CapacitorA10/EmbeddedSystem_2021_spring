@@ -22,6 +22,16 @@ module TOP(
     // output data wire?reg?
     wire [7:0] out_p0, out_p1, out_p2, out_p3; //rdata[31:0] = {outp0...outp3}
 
+    // input register
+    always @ (posedge clk)
+        if(cs & write) 
+            case(addr)
+                3'b000: data0 <= wdata; //0
+                3'b001: data1 <= wdata; //1
+                3'b010: data2 <= wdata; //2
+                3'b011: data3 <= wdata; //3
+            endcase
+    
     // input data separate
     assign p00 = data0[31:24];
     assign p01 = data0[23:16];
@@ -53,26 +63,6 @@ module TOP(
     SOBEL U3 (.p0(p11), .p1(p12), .p2(p13), .p3(p21), .p5(p23), .p6(p31), .p7(p32), .p8(p33),
                 .out(out_p3));
 
-    // input register A
-    always @ (posedge clk)
-        if(cs & write & (addr == 3'b000)) begin
-            data0 <= wdata;
-        end 
-    // input register B
-    always @ (posedge clk)
-        if(cs & write & (addr == 3'b001)) begin
-            data1 <= wdata;
-        end 
-    // input register C
-    always @ (posedge clk)
-        if(cs & write & (addr == 3'b010)) begin
-            data2 <= wdata;
-        end 
-    // input register D
-    always @ (posedge clk)
-        if(cs & write & (addr == 3'b011)) begin
-            data3 <= wdata;
-        end 
     // output register
     always @ (posedge clk)
         if(cs & read)
