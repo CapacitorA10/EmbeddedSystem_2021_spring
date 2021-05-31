@@ -61,6 +61,7 @@ void acc_sobel(unsigned char img[][256]){
 
     for(i = 1; i < 254; i+=2){
         for(j = 1; j < 254; j+=2){
+            for(k = 0; k <100; k++){
             //data separate
             row0 = ( (img[i-1][j-1]<<24) | (img[i-1][j]<<16) 
                     | (img[i-1][j+1]<<8) | (img[i-1][j+2]) );
@@ -72,7 +73,7 @@ void acc_sobel(unsigned char img[][256]){
                     | (img[i+2][j+1]<<8) | (img[i+2][j+2]) );
 
             // calc
-            for(k = 0; k <100; k++){
+            
                 *sobel_accelerator = row0;
                 *(sobel_accelerator+1) = row1;
                 *(sobel_accelerator+2) = row2;
