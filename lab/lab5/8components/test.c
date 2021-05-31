@@ -61,22 +61,23 @@ void acc_sobel(unsigned char img[][256]){
 
     for(i = 1; i < 252; i+=4){
         for(j = 1; j < 254; j+=2){
-            //data separate
-            row0 = ( (img[i-1][j-1]<<24) | (img[i-1][j]<<16) 
-                    | (img[i-1][j+1]<<8) | (img[i-1][j+2]) );
-            row1 = ( (img[i][j-1]<<24) | (img[i][j]<<16) 
-                    | (img[i][j+1]<<8) | (img[i][j+2]) );
-            row2 = ( (img[i+1][j-1]<<24) | (img[i+1][j]<<16) 
-                    | (img[i+1][j+1]<<8) | (img[i+1][j+2]) );
-            row3 = ( (img[i+2][j-1]<<24) | (img[i+2][j]<<16) 
-                    | (img[i+2][j+1]<<8) | (img[i+2][j+2]) );
-            row4 = ( (img[i+3][j-1]<<24) | (img[i+3][j]<<16) 
-                    | (img[i+3][j+1]<<8) | (img[i+3][j+2]) );
-            row5 = ( (img[i+4][j-1]<<24) | (img[i+4][j]<<16) 
-                    | (img[i+4][j+1]<<8) | (img[i+4][j+2]) );
-
-            // calc
             for(k = 0; k <100; k++){
+                //data separate
+                row0 = ( (img[i-1][j-1]<<24) | (img[i-1][j]<<16) 
+                        | (img[i-1][j+1]<<8) | (img[i-1][j+2]) );
+                row1 = ( (img[i][j-1]<<24) | (img[i][j]<<16) 
+                        | (img[i][j+1]<<8) | (img[i][j+2]) );
+                row2 = ( (img[i+1][j-1]<<24) | (img[i+1][j]<<16) 
+                        | (img[i+1][j+1]<<8) | (img[i+1][j+2]) );
+                row3 = ( (img[i+2][j-1]<<24) | (img[i+2][j]<<16) 
+                        | (img[i+2][j+1]<<8) | (img[i+2][j+2]) );
+                row4 = ( (img[i+3][j-1]<<24) | (img[i+3][j]<<16) 
+                        | (img[i+3][j+1]<<8) | (img[i+3][j+2]) );
+                row5 = ( (img[i+4][j-1]<<24) | (img[i+4][j]<<16) 
+                        | (img[i+4][j+1]<<8) | (img[i+4][j+2]) );
+
+                // calc
+            
                 *sobel_accelerator = row0;
                 *(sobel_accelerator+1) = row1;
                 *(sobel_accelerator+2) = row2;
